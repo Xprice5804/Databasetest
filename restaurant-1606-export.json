@@ -1,0 +1,44 @@
+{
+  "Kunder" : {
+    "91187339" : {
+      "Name" : "Ole M"
+    },
+    "94053294" : {
+      "Date" : "2018-03-29",
+      "Name" : "Eirik Mathias",
+      "TableNumber" : "nr5",
+      "Time" : "160010"
+    }
+  },
+  "bestillinger" : {
+    "-L8Tyh0jEJ_y5u7Zx_Qe" : {
+      "Date" : "2022-08-16",
+      "Kunde nr" : "91187339",
+      "Table" : "nr3",
+      "Time" : "19:08",
+      "food" : "Steak"
+    }
+  },
+  "food" : {
+    "Burger" : {
+      "Price" : "174kr",
+      "img" : "./img/haseeb-jamil-466109-unsplash.jpg"
+    },
+    "Chicken Burger" : {
+      "Price" : "155kr",
+      "img" : "./img/eaters-collective-172258-unsplash.jpg"
+    },
+    "Musels" : {
+      "Price" : "170kr",
+      "img" : "./img/adrien-sala-46727-unsplash.jpg"
+    },
+    "Pasta Carbonara" : {
+      "Price" : "168kr",
+      "img" : "./img/janko-ferlic-165857-unsplash.jpg"
+    },
+    "Steak" : {
+      "Price" : "236kr",
+      "img" : "./img/jason-leung-369162-unsplash.jpg"
+    }
+  }
+}

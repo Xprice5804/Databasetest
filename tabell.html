@@ -54,7 +54,12 @@
     </form>
     <table>
       <thead>
-
+        <tr>
+          <th>Dato</th>
+          <th>Tid</th>
+          <th>Bord</th>
+          <th>Mat</th>
+        </tr>
       </thead>
       <tbody id="data">
 
@@ -64,9 +69,11 @@
 </body>
 <script type="text/javascript">
 var inpPhone = document.getElementById("Phone");
-var formPhone = document.getElementById("form")
+var formPhone = document.getElementById("form");
+var tbdata = document.getElementById("data");
 
 var database = firebase.database();
+var bestillinger = database.ref("bestillinger");
 
 function check(event) {
   event.preventDefault();
@@ -82,12 +89,30 @@ function check(event) {
           console.log(a);
           console.log(snapshot);
           if (a==true) {
-            
+              bestillinger
+                .orderByChild("Kunde nr")
+                .equalTo(Phone)
+                .on("child_added", visBestilling);
           } else {
             window.alert('You are not in the register');
-          }
+          };
         })
       }
+
+function visBestilling(snapshot) {
+  var bestillingvis = snapshot.val();
+  var dato = bestillingvis.Date;
+  var bord = bestillingvis.Table;
+  var food = bestillingvis.food;
+  var time = bestillingvis.Time;
+
+  tbdata.innerHTML += `<tr>
+    <th>${dato}</th>
+    <th>${time}</th>
+    <th>${bord}</th>
+    <th>${food}</th>
+  </tr>`
+}
 
 formPhone.onsubmit = check;
 

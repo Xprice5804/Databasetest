@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="no" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.4.3/css/foundation.css">
+    <link rel="stylesheet" href="./master.css">
+<script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
+<script>
+  // Initialize Firebase
+  var config = {
+    apiKey: "AIzaSyCtkgAQH3znosuNernaBz8oDb3YeEUfW1E",
+    authDomain: "restaurant-1606.firebaseapp.com",
+    databaseURL: "https://restaurant-1606.firebaseio.com",
+    projectId: "restaurant-1606",
+    storageBucket: "restaurant-1606.appspot.com",
+    messagingSenderId: "839578733085"
+  };
+  firebase.initializeApp(config);
+</script>
+    <title></title>
+  </head>
+
+  <body>
+    <nav class="nav">
+      <ul>
+        <li>
+          <a class="index" href="index.html">
+            <img id="home" src="./svg/home-gray.svg" alt="home">
+            Hjem
+          </a>
+        </li>
+        <!--to tomme elementer for å få valgene på hver sin side av navbaren-->
+        <li></li>
+        <li></li>
+        <li>
+          <a href="tabell.html">Mine bestillinger</a>
+        </li>
+      </ul>
+    </nav>
+    <header>
+      <div class="overlay">
+        <h1>Reddere la Fortuna</h1>
+        <a href="#scrollIndex">
+          <img src="./svg/down-arrow.svg" alt="down-arrow">
+        </a>
+      </div>
+    </header>
+  <!----------------------->
+    <main>
+      <form class="" action="tabell.html" method="post" id="seating">
+        <div class="seat">
+          <input type="radio" name="table" value="nr1" id="nr1">
+          <label for="nr1"><img src="./svg/tvelwe.svg" alt="Table for six"></label>
+        </div>
+        <div class="seat2">
+          <input type="radio" name="table" value="nr2" id="nr2">
+          <label for="nr2"><img src="./svg/six.svg" alt="Table for six"></label>
+        </div>
+        <div class="seat3">
+          <input type="radio" name="table" value="nr3" id="nr3">
+          <label for="nr3"><img src="./svg/six.svg" alt="Table for six"></label>
+        </div>
+        <div class="seat4">
+          <input type="radio" name="table" value="nr4" id="nr4">
+          <label for="nr4"><img src="./svg/four.svg" alt="Table for six"></label>
+        </div>
+        <div class="seat5">
+          <input type="radio" name="table" value="nr5" id="nr5">
+          <label for="nr5"><img src="./svg/four.svg" alt="Table for six"></label>
+        </div>
+        <div class="seat6">
+          <input type="radio" name="table" value="nr6" id="nr6">
+          <label for="nr6"><img src="./svg/two.svg" alt="Table for six"></label>
+        </div>
+        <div class="" id="orderfood">
+
+        </div>
+        <div class="form1">
+          <h6>NB!: Drinks are ordered on arrival and you can only order the same for all people oround the table</h6>
+          <label for="Name">Name</label><input type="text" name="" value="" id="Name">
+          <label for="Phone">Phonenumber</label><input type="text" name="" value="" id="Phone">
+          <label for="Date">Date</label><input type="date" name="" value="" id="Date">
+          <label for="Time">Time of day</label><input type="time" name="" value="" id="Time">
+          <button class="button" type="submit" name="button">Order seating</button>
+          </div>
+      </form>
+    </main>
+  <!----------------------->
+  </body>
+  <script type="text/javascript">
+  //get all variables
+  var inptable  = document.getElementsByName("table");
+  var inpfood = document.getElementsByName("food")
+  var inpName = document.getElementById("Name");
+  var inpPhone = document.getElementById("Phone");
+  var inpDate = document.getElementById("Date");
+  var inpTime = document.getElementById("Time");
+  var formseating = document.getElementById("seating");
+  var Orderfood = document.getElementById("orderfood")
+
+
+  //Database refrenses
+  var database = firebase.database();
+  var PersonerDB = database.ref("Kunder");
+  var foodDB = database.ref("food");
+  var bestillinger = database.ref("bestillinger")
+
+function getUser(event) {
+  event.preventDefault();
+  let name = inpName.value;
+  let phone = inpPhone.value;
+  let date = inpDate.value;
+  let time = inpTime.value;
+
+  var nyKunde = database.ref("Kunder/"+phone);
+  nyKunde.set({
+    "Name":name,
+  });
+
+    for (var radio of inptable){
+      console.log(radio);
+      if (radio.checked) {
+        var radio_val = radio.id
+      }
+    };
+
+    for (var checkbox of inpfood){
+      console.log(checkbox);
+      if (checkbox.checked) {
+        var check_val = checkbox.value
+      }
+    };
+    var nyBestilling = {
+      "Kunde nr": phone,
+      "Date":date,
+      "Time": time,
+      "Table": radio_val,
+      "food": check_val,
+    }
+    bestillinger.push(nyBestilling);
+}
+
+
+function GetFood(snapshot) {
+  let foodName = snapshot.key;
+  let food = snapshot.val();
+  let getPrice = food.Price;
+  let getimg = food.img;
+
+  Orderfood.innerHTML += `<article class="food"><input type="checkbox" name="food" value="${foodName}" id="${foodName}"><label for="${foodName}"><img src="${getimg}" alt="${foodName}"><br>${foodName}<br>${getPrice}</label></article>`
+}
+
+  foodDB.on("child_added", GetFood);
+  formseating.onsubmit = getUser;
+  </script>
+</html>

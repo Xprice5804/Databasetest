@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="no" dir="ltr">
+
+<head>
+  <meta charset="utf-8">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/foundation/6.4.3/css/foundation.css">
+  <link rel="stylesheet" href="./master.css">
+  <script src="https://www.gstatic.com/firebasejs/4.12.0/firebase.js"></script>
+  <script>
+    // Initialize Firebase
+    var config = {
+      apiKey: "AIzaSyCtkgAQH3znosuNernaBz8oDb3YeEUfW1E",
+      authDomain: "restaurant-1606.firebaseapp.com",
+      databaseURL: "https://restaurant-1606.firebaseio.com",
+      projectId: "restaurant-1606",
+      storageBucket: "restaurant-1606.appspot.com",
+      messagingSenderId: "839578733085"
+    };
+    firebase.initializeApp(config);
+  </script>
+  <title></title>
+</head>
+
+<body>
+  <nav class="nav">
+    <ul>
+      <li>
+        <a class="index" href="index.html">
+          <img id="home" src="./svg/home-gray.svg" alt="home">
+          Hjem
+        </a>
+      </li>
+      <!--to tomme elementer for å få valgene på hver sin side av navbaren-->
+      <li></li>
+      <li></li>
+      <li>
+        <a href="tabell.html">Mine bestillinger</a>
+      </li>
+    </ul>
+  </nav>
+  <header>
+    <div class="overlay">
+      <h1>Reddere la Fortuna</h1>
+      <a href="#scrollIndex">
+        <img src="./svg/down-arrow.svg" alt="down-arrow">
+      </a>
+    </div>
+  </header>
+
+  <main>
+    <form class="" method="post" id="form" >
+      <label for="Phone">Phone number</label><input type="text" name="Phone" value="" id="Phone">
+      <button class="button" type="submit" name="button">Se bestillinger</button>
+    </form>
+    <table>
+      <thead>
+
+      </thead>
+      <tbody id="data">
+
+      </tbody>
+    </table>
+  </main>
+</body>
+<script type="text/javascript">
+var inpPhone = document.getElementById("Phone");
+var formPhone = document.getElementById("form")
+
+var database = firebase.database();
+
+function check(event) {
+  event.preventDefault();
+
+  var Phone = inpPhone.value;
+  var checkoredr = database.ref("Kunder");
+//Her skulle jeg skjekke om nummeret finnes og så kjøre koden for å hente det ut
+
+  checkoredr.once("value")
+        .then(function(snapshot){
+          var a = snapshot.child(Phone).exists();
+          console.log(Phone);
+          console.log(a);
+          console.log(snapshot);
+          if (a==true) {
+            
+          } else {
+            window.alert('You are not in the register');
+          }
+        })
+      }
+
+formPhone.onsubmit = check;
+
+
+</script>
+</html>

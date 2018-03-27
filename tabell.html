@@ -18,6 +18,7 @@
     };
     firebase.initializeApp(config);
   </script>
+  <script src="JS\zenscroll-latest\zenscroll-min.js"></script>
   <title></title>
 </head>
 
@@ -47,7 +48,7 @@
     </div>
   </header>
 
-  <main>
+  <main id="scrollIndex">
     <form class="" method="post" id="form" >
       <label for="Phone">Phone number</label><input type="text" name="Phone" value="" id="Phone">
       <button class="button" type="submit" name="button">Se bestillinger</button>
@@ -68,10 +69,12 @@
   </main>
 </body>
 <script type="text/javascript">
+//deklarerer vaiablene som trengs
 var inpPhone = document.getElementById("Phone");
 var formPhone = document.getElementById("form");
 var tbdata = document.getElementById("data");
 
+//deklarerer databasene
 var database = firebase.database();
 var bestillinger = database.ref("bestillinger");
 
@@ -82,13 +85,13 @@ function check(event) {
   var checkoredr = database.ref("Kunder");
 //Her skulle jeg skjekke om nummeret finnes og så kjøre koden for å hente det ut
 
-  checkoredr.once("value")
+  checkoredr.once("value")//kjøres kun en gang
         .then(function(snapshot){
-          var a = snapshot.child(Phone).exists();
+          var a = snapshot.child(Phone).exists();//spørr firebase om denne verdien finnes. sender tilbake boolan
           console.log(Phone);
           console.log(a);
           console.log(snapshot);
-          if (a==true) {
+          if (a==true) {//hvis a = sant hent databasen og sorter den etter hvem som har bestilt
               bestillinger
                 .orderByChild("Kunde nr")
                 .equalTo(Phone)
@@ -100,12 +103,14 @@ function check(event) {
       }
 
 function visBestilling(snapshot) {
+  tbdata.innerHTML = ``;//fjerner det som sto der før
+  //henter de nye bestillingene fra firebase
   var bestillingvis = snapshot.val();
   var dato = bestillingvis.Date;
   var bord = bestillingvis.Table;
   var food = bestillingvis.food;
   var time = bestillingvis.Time;
-
+  //legger til de nye bestillingene
   tbdata.innerHTML += `<tr>
     <th>${dato}</th>
     <th>${time}</th>

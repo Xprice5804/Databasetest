@@ -17,6 +17,7 @@
   };
   firebase.initializeApp(config);
 </script>
+<script src="JS\zenscroll-latest\zenscroll-min.js"></script>
     <title></title>
   </head>
 
@@ -46,7 +47,7 @@
       </div>
     </header>
   <!----------------------->
-    <main>
+    <main id="scrollIndex">
       <form class="" action="tabell.html" method="post" id="seating">
         <div class="seat">
           <input type="radio" name="table" value="nr1" id="nr1">
@@ -88,7 +89,7 @@
   <!----------------------->
   </body>
   <script type="text/javascript">
-  //get all variables
+  //deklarerer alle variabler
   var inptable  = document.getElementsByName("table");
   var inpfood = document.getElementsByName("food")
   var inpName = document.getElementById("Name");
@@ -105,6 +106,7 @@
   var foodDB = database.ref("food");
   var bestillinger = database.ref("bestillinger")
 
+//samler inna alle variablene fra skjemaet og sender dem til databasen
 function getUser(event) {
   event.preventDefault();
   let name = inpName.value;
@@ -112,19 +114,23 @@ function getUser(event) {
   let date = inpDate.value;
   let time = inpTime.value;
 
+  //bruker en databasereferanse med en variabel for å kunne bestemme en primærnøkkel
   var nyKunde = database.ref("Kunder/"+phone);
   nyKunde.set({
     "Name":name,
   });
 
     for (var radio of inptable){
+      //bruker en for løkke til å hente ut verdien til radio buttons
       console.log(radio);
       if (radio.checked) {
         var radio_val = radio.id
+        //den ene som er checked blir gitt til radio_val
       }
     };
 
     for (var checkbox of inpfood){
+      //klarte ikke hente ut en array, prøvde mye forskjellig men det får går med at man får bare en av dem
       console.log(checkbox);
       if (checkbox.checked) {
         var check_val = checkbox.value
@@ -137,19 +143,19 @@ function getUser(event) {
       "Table": radio_val,
       "food": check_val,
     }
-    bestillinger.push(nyBestilling);
+    bestillinger.push(nyBestilling);//bruker .push slik at det gennererres en tilfeldig primærnøkkel
 }
 
-
+//bruker snapshot for å hente ut alt som trengs for å lage siden
 function GetFood(snapshot) {
   let foodName = snapshot.key;
   let food = snapshot.val();
   let getPrice = food.Price;
   let getimg = food.img;
-
+  //bruker innerHTML for å legge til ting på siden
   Orderfood.innerHTML += `<article class="food"><input type="checkbox" name="food" value="${foodName}" id="${foodName}"><label for="${foodName}"><img src="${getimg}" alt="${foodName}"><br>${foodName}<br>${getPrice}</label></article>`
 }
-
+  //aktiverer de to funksjonene
   foodDB.on("child_added", GetFood);
   formseating.onsubmit = getUser;
   </script>
